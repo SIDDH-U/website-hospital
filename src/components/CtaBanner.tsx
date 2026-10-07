@@ -29,25 +29,21 @@ export function CtaBanner({ onOpenBooking }: CtaBannerProps) {
           />
 
           {/* ========================================================
-              TABLET & DESKTOP BACKGROUND PHOTO (768px and up)
-              Right 45% with horizontal mask fade from the left
+              RESPONSIVE BACKGROUND PHOTO
+              Mobile (< 768px): Aspect 16:9 at top with bottom fade mask
+              Tablet/Desktop (768px+): Absolute right 45% with left fade mask
+              Rendered ONCE with responsive classes
              ======================================================== */}
           <div
-            className="hidden md:block absolute inset-y-0 right-0 w-[45%] pointer-events-none overflow-hidden"
+            className="relative w-full aspect-[16/9] md:aspect-auto md:absolute md:inset-y-0 md:right-0 md:w-[45%] pointer-events-none overflow-hidden cta-photo-mask"
             aria-hidden="true"
-            style={{
-              maskImage:
-                "linear-gradient(to right, transparent 0%, rgba(0,0,0,0.18) 12%, rgba(0,0,0,0.65) 26%, #000 45%)",
-              WebkitMaskImage:
-                "linear-gradient(to right, transparent 0%, rgba(0,0,0,0.18) 12%, rgba(0,0,0,0.65) 26%, #000 45%)",
-            }}
           >
             <div className="relative w-full h-full cta-photo-zoom">
               <Image
                 src="/images/cta-banner.webp"
                 alt="Compassionate medical team at LifeCare Hospital"
                 fill
-                sizes="(min-width: 1024px) 540px, 450px"
+                sizes="(max-width: 768px) 100vw, (min-width: 1024px) 540px, 450px"
                 placeholder="blur"
                 blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAICAIAAABPmPnhAAAACXBIWXMAAAPoAAAD6AG1e1JrAAABA0lEQVQImQH4AAf/ALC4sJOponyZkbq+s8TIwL29r8XAsquuptne3MO+sgDZ2tOrvriJpJums6fQ2NWosZfCu62De3U8MiyblIsA5u3vrcfFhaijw8e95unkcW5jd1hFsox5WUAwXVFIANbl6ZS3tFBtVJ+qn5enm4JpWqp8ZaR2X0YvIEA0LQCfxcqyvrpnemapq52DiITKw8O5qKBmTTyai4VTQjgAvMG/tLe0qq2lsLCjlIyI3tPUtpiJzqGDvpZ4iWZLAMe8sM3PzsbHws7Lw7y0sNbGxdC+vsizqLKWgpKBdQCmm4rJxr7TyLfh0cLavrPXycfFsqm/qp22oZi4qJvVKpfhwWXXkwAAAABJRU5ErkJggg=="
                 className="object-cover object-center"
@@ -59,55 +55,30 @@ export function CtaBanner({ onOpenBooking }: CtaBannerProps) {
           </div>
 
           {/* ========================================================
-              MOBILE VIEW PHOTO (< 768px)
-              Sits at the top of the card and bleeds to card edges (16:9),
-              with mask-image fading bottom 40% into the card's teal
-             ======================================================== */}
-          <div
-            className="md:hidden relative w-full aspect-[16/9] overflow-hidden"
-            aria-hidden="true"
-            style={{
-              maskImage:
-                "linear-gradient(to bottom, #000 0%, #000 60%, rgba(0,0,0,0.75) 72%, rgba(0,0,0,0.4) 85%, rgba(0,0,0,0.12) 94%, transparent 100%)",
-              WebkitMaskImage:
-                "linear-gradient(to bottom, #000 0%, #000 60%, rgba(0,0,0,0.75) 72%, rgba(0,0,0,0.4) 85%, rgba(0,0,0,0.12) 94%, transparent 100%)",
-            }}
-          >
-            <div className="relative w-full h-full cta-photo-zoom">
-              <Image
-                src="/images/cta-banner.webp"
-                alt="Compassionate patient care at LifeCare Hospital"
-                fill
-                sizes="100vw"
-                placeholder="blur"
-                blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAICAIAAABPmPnhAAAACXBIWXMAAAPoAAAD6AG1e1JrAAABA0lEQVQImQH4AAf/ALC4sJOponyZkbq+s8TIwL29r8XAsquuptne3MO+sgDZ2tOrvriJpJums6fQ2NWosZfCu62De3U8MiyblIsA5u3vrcfFhaijw8e95unkcW5jd1hFsox5WUAwXVFIANbl6ZS3tFBtVJ+qn5enm4JpWqp8ZaR2X0YvIEA0LQCfxcqyvrpnemapq52DiITKw8O5qKBmTTyai4VTQjgAvMG/tLe0qq2lsLCjlIyI3tPUtpiJzqGDvpZ4iWZLAMe8sM3PzsbHws7Lw7y0sNbGxdC+vsizqLKWgpKBdQCmm4rJxr7TyLfh0cLavrPXycfFsqm/qp22oZi4qJvVKpfhwWXXkwAAAABJRU5ErkJggg=="
-                className="object-cover object-center"
-                style={{ filter: "saturate(0.95)" }}
-              />
-              <div className="absolute inset-0 bg-[#0F3D3E]/20 mix-blend-multiply" />
-            </div>
-          </div>
-
-          {/* ========================================================
               CARD CONTENT
-              Staggered words in heading, clear text, idle shine + pulse ring button
+              Staggered words in heading, real spaces, idle shine + pulse ring button
              ======================================================== */}
           <div className="relative z-10 p-6 pt-3 pb-8 sm:p-10 lg:p-14 md:max-w-[55%] flex flex-col items-start justify-center">
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white tracking-tight leading-tight text-balance">
-              {titleWords.map((word, idx) => (
-                <span
-                  key={idx}
-                  className="inline-block"
-                  style={{
-                    opacity: 0,
-                    animation: "heroFadeUp14 600ms cubic-bezier(0.16, 1, 0.3, 1) forwards",
-                    animationDelay: `${150 + idx * 55}ms`,
-                    marginRight: "0.28em",
-                  }}
-                >
-                  {word}
-                </span>
-              ))}
+            <h2
+              aria-label={hospitalConfig.ctaBanner.title}
+              className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white tracking-tight leading-tight text-balance"
+            >
+              <span aria-hidden="true">
+                {titleWords.map((word, idx) => (
+                  <span
+                    key={idx}
+                    className="inline-block"
+                    style={{
+                      opacity: 0,
+                      animation: "heroFadeUp14 600ms cubic-bezier(0.16, 1, 0.3, 1) forwards",
+                      animationDelay: `${150 + idx * 55}ms`,
+                      marginRight: "0.28em",
+                    }}
+                  >
+                    {word}{" "}
+                  </span>
+                ))}
+              </span>
             </h2>
 
             <p className="mt-3 text-sm sm:text-base text-white/90 leading-relaxed max-w-lg">

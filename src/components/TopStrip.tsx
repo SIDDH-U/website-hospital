@@ -52,36 +52,51 @@ export function TopStrip() {
               <PhoneIcon className="w-3.5 h-3.5 text-[#E53E3E]" />
               <span>24/7 Emergency: {hospitalConfig.contact.emergencyPhone}</span>
             </a>
-            <span className="text-[#8FBFA3]">|</span>
-            <div className="flex items-center gap-3 text-[#1F2D2B]">
-              <a
-                href={hospitalConfig.socials.facebook}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Facebook"
-                className="hover:text-[#0F3D3E] transition-colors p-1"
-              >
-                <FacebookIcon className="w-3.5 h-3.5" />
-              </a>
-              <a
-                href={hospitalConfig.socials.instagram}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Instagram"
-                className="hover:text-[#0F3D3E] transition-colors p-1"
-              >
-                <InstagramIcon className="w-3.5 h-3.5" />
-              </a>
-              <a
-                href={hospitalConfig.socials.linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="LinkedIn"
-                className="hover:text-[#0F3D3E] transition-colors p-1"
-              >
-                <LinkedinIcon className="w-3.5 h-3.5" />
-              </a>
-            </div>
+            {Boolean(
+              hospitalConfig.socials.facebook ||
+                hospitalConfig.socials.instagram ||
+                hospitalConfig.socials.linkedin ||
+                hospitalConfig.socials.youtube
+            ) && (
+              <>
+                <span className="text-[#8FBFA3]">|</span>
+                <div className="flex items-center gap-3 text-[#1F2D2B]">
+                  {hospitalConfig.socials.facebook && (
+                    <a
+                      href={hospitalConfig.socials.facebook}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label="Facebook"
+                      className="hover:text-[#0F3D3E] transition-colors p-1"
+                    >
+                      <FacebookIcon className="w-3.5 h-3.5" />
+                    </a>
+                  )}
+                  {hospitalConfig.socials.instagram && (
+                    <a
+                      href={hospitalConfig.socials.instagram}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label="Instagram"
+                      className="hover:text-[#0F3D3E] transition-colors p-1"
+                    >
+                      <InstagramIcon className="w-3.5 h-3.5" />
+                    </a>
+                  )}
+                  {hospitalConfig.socials.linkedin && (
+                    <a
+                      href={hospitalConfig.socials.linkedin}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label="LinkedIn"
+                      className="hover:text-[#0F3D3E] transition-colors p-1"
+                    >
+                      <LinkedinIcon className="w-3.5 h-3.5" />
+                    </a>
+                  )}
+                </div>
+              </>
+            )}
           </div>
         </div>
       </div>

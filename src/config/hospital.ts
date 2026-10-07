@@ -55,12 +55,24 @@ export interface ServiceItem {
   image: string;
 }
 
+export const CALLBACK_TEXT = "We'll call you shortly to confirm";
+export const DEFAULT_SITE_URL = "https://website-hospital-nine.vercel.app";
+
+export function getSiteUrl(): string {
+  return process.env.NEXT_PUBLIC_SITE_URL || DEFAULT_SITE_URL;
+}
+
+export function isProductionDomain(): boolean {
+  return (process.env.NEXT_PUBLIC_SITE_URL || DEFAULT_SITE_URL) === "https://lifecarehospital-nanded.com";
+}
+
 export interface HospitalConfig {
   name: string;
   legalName: string;
   tagline: string;
   description: string;
   fullDescription: string;
+  callbackText: string;
   city: string;
   state: string;
   pincode: string;
@@ -151,6 +163,7 @@ export const hospitalConfig: HospitalConfig = {
   tagline: "Healing Begins The Moment You Walk In",
   description: "Expert doctors, advanced treatment and compassionate care in Nanded, Maharashtra.",
   fullDescription: "At LifeCare Hospital, we combine clinical expertise with a human touch to deliver safe, effective and personalised care for every patient in Nanded and surrounding regions.",
+  callbackText: CALLBACK_TEXT,
   city: "Nanded",
   state: "Maharashtra",
   pincode: "431601",
@@ -178,10 +191,10 @@ export const hospitalConfig: HospitalConfig = {
     display: "Mon - Sat: 8 AM - 8 PM · Emergency 24/7",
   },
   socials: {
-    facebook: "https://facebook.com/lifecarehospital",
-    instagram: "https://instagram.com/lifecarehospital",
-    linkedin: "https://linkedin.com/company/lifecarehospital",
-    youtube: "https://youtube.com/@lifecarehospital",
+    facebook: "",
+    instagram: "",
+    linkedin: "",
+    youtube: "",
   },
   hero: {
     badgeRating: "4.9",

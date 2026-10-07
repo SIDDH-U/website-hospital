@@ -1,8 +1,9 @@
-import React from "react";
+import React, { Suspense } from "react";
+import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { hospitalConfig } from "@/config/hospital";
+import { hospitalConfig, getSiteUrl } from "@/config/hospital";
 import { TopStrip } from "@/components/TopStrip";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -12,10 +13,12 @@ import {
   CalendarIcon,
   PhoneIcon,
   CheckCircleIcon,
-  ArrowRightIcon,
   StethoscopeIcon,
-  ClockIcon,
 } from "@/components/Icons";
+
+interface PageProps {
+  params: Promise<{ slug: string }>;
+}
 
 export function generateStaticParams() {
   return hospitalConfig.departments.map((dept) => ({
@@ -23,11 +26,54 @@ export function generateStaticParams() {
   }));
 }
 
-interface PageProps {
-  params: Promise<{ slug: string }>;
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const dept = hospitalConfig.departments.find((d) => d.slug === slug);
+
+  if (!dept) {
+    return {
+      title: "Department Not Found",
+    };
+  }
+
+  const siteUrl = getSiteUrl();
+  const pageUrl = `${siteUrl}/departments/${dept.slug}`;
+  const imageUrl = `${siteUrl}/images/departments/${dept.slug}.jpg`;
+
+  return {
+    title: `${dept.name} Department`,
+    description: dept.description,
+    alternates: {
+      canonical: pageUrl,
+    },
+    openGraph: {
+      title: `${dept.name} Department | ${hospitalConfig.name}`,
+      description: dept.description,
+      url: pageUrl,
+      siteName: hospitalConfig.name,
+      images: [
+        {
+          url: imageUrl,
+          width: 1200,
+          height: 630,
+          alt: `${dept.name} Department at ${hospitalConfig.name}`,
+        },
+      ],
+      locale: "en_IN",
+      type: "website",
+    },
+  };
 }
 
-export default async function DepartmentDetailPage({ params }: PageProps) {
+export default function DepartmentDetailPage({ params }: PageProps) {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-white" />}>
+      <DepartmentContent params={params} />
+    </Suspense>
+  );
+}
+
+async function DepartmentContent({ params }: PageProps) {
   const { slug } = await params;
   const dept = hospitalConfig.departments.find((d) => d.slug === slug);
 
@@ -35,48 +81,61 @@ export default async function DepartmentDetailPage({ params }: PageProps) {
     return notFound();
   }
 
-  // Doctors belonging to this department
+  const siteUrl = getSiteUrl();
   const deptDoctors = hospitalConfig.doctors.filter(
     (d) => d.departmentId === dept.id
   );
 
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: siteUrl,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Departments",
+        item: `${siteUrl}/departments`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: dept.name,
+        item: `${siteUrl}/departments/${dept.slug}`,
+      },
+    ],
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-white text-[#1F2D2B]">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       <TopStrip />
       <Header />
 
       <main className="flex-1 pb-16 lg:pb-0">
         {/* ========================================================
             INTEGRATED DEPARTMENT HERO
-            Matches Point 2 Hero technique:
-            Full-width #0F3D3E base, integrated photo background,
-            desktop horizontal gradient & mobile vertical gradient
            ======================================================== */}
         <section className="relative w-full bg-[#0F3D3E] text-white rounded-b-[36px] lg:rounded-b-[48px] overflow-hidden">
-          {/* Integrated Background Photo */}
           <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
-            {/* Desktop: Photo on right with left-to-right teal gradient */}
-            <div className="hidden lg:block absolute inset-y-0 right-0 w-[55%]">
+            <div className="absolute inset-0 lg:left-auto lg:right-0 lg:w-[55%]">
               <Image
                 src={`/images/departments/${dept.slug}.jpg`}
-                alt={`${dept.name} department facility at LifeCare Hospital`}
+                alt=""
                 fill
                 priority
-                className="object-cover object-center"
+                sizes="100vw"
+                className="object-cover object-bottom lg:object-center"
               />
-              <div className="absolute inset-0 bg-gradient-to-r from-[#0F3D3E] via-[#0F3D3E]/85 to-transparent" />
-            </div>
-
-            {/* Mobile: Photo on bottom with top-to-bottom teal gradient */}
-            <div className="lg:hidden absolute inset-0">
-              <Image
-                src={`/images/departments/${dept.slug}.jpg`}
-                alt={`${dept.name} department facility at LifeCare Hospital`}
-                fill
-                priority
-                className="object-cover object-bottom"
-              />
-              <div className="absolute inset-0 bg-gradient-to-b from-[#0F3D3E] via-[#0F3D3E]/90 to-[#0F3D3E]/70" />
+              <div className="absolute inset-0 bg-gradient-to-b from-[#0F3D3E] via-[#0F3D3E]/90 to-[#0F3D3E]/70 lg:bg-gradient-to-r lg:from-[#0F3D3E] lg:via-[#0F3D3E]/85 lg:to-transparent" />
             </div>
           </div>
 
@@ -130,12 +189,9 @@ export default async function DepartmentDetailPage({ params }: PageProps) {
 
         {/* ========================================================
             OVERVIEW & TWO SHORT LISTS
-            1. Conditions We Treat
-            2. Treatments & Facilities
            ======================================================== */}
         <section className="py-12 sm:py-16">
           <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
-            {/* Overview Paragraph */}
             <div className="max-w-3xl mb-12">
               <span className="text-xs font-extrabold uppercase tracking-widest text-[#2DA870] block mb-2">
                 CLINICAL EXCELLENCE
@@ -148,7 +204,6 @@ export default async function DepartmentDetailPage({ params }: PageProps) {
               </p>
             </div>
 
-            {/* Two Lists with Icons */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {/* List 1: Conditions We Treat */}
               <div className="p-6 sm:p-8 rounded-3xl bg-[#F7F5EF] border border-[#EBE7DC]">
@@ -229,7 +284,7 @@ export default async function DepartmentDetailPage({ params }: PageProps) {
                     src={`/images/departments/${dept.slug}-${num}.jpg`}
                     alt={`${dept.name} clinical facility area ${num}`}
                     fill
-                    sizes="(max-width: 640px) 100vw, 33vw"
+                    sizes="(max-width: 768px) 100vw, 33vw"
                     className="object-cover group-hover:scale-105 transition-transform duration-500"
                     loading="lazy"
                   />
@@ -250,7 +305,6 @@ export default async function DepartmentDetailPage({ params }: PageProps) {
 
         {/* ========================================================
             "OUR [DEPARTMENT] DOCTORS"
-            Using the standard doctor card format
            ======================================================== */}
         <section className="py-12 sm:py-16">
           <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
@@ -279,7 +333,7 @@ export default async function DepartmentDetailPage({ params }: PageProps) {
                         src={doc.image}
                         alt={doc.name}
                         fill
-                        sizes="(max-width: 640px) 100vw, 33vw"
+                        sizes="(max-width: 768px) 100vw, 33vw"
                         className="object-cover object-top hover-img-zoom"
                         loading="lazy"
                       />

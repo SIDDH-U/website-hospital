@@ -1,8 +1,9 @@
-import React from "react";
+import React, { Suspense } from "react";
+import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { hospitalConfig } from "@/config/hospital";
+import { hospitalConfig, getSiteUrl } from "@/config/hospital";
 import { TopStrip } from "@/components/TopStrip";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -13,9 +14,12 @@ import {
   PhoneIcon,
   ClockIcon,
   CheckCircleIcon,
-  ArrowRightIcon,
   StethoscopeIcon,
 } from "@/components/Icons";
+
+interface PageProps {
+  params: Promise<{ slug: string }>;
+}
 
 export function generateStaticParams() {
   return hospitalConfig.doctors.map((doc) => ({
@@ -23,11 +27,54 @@ export function generateStaticParams() {
   }));
 }
 
-interface PageProps {
-  params: Promise<{ slug: string }>;
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const doctor = hospitalConfig.doctors.find((d) => d.slug === slug);
+
+  if (!doctor) {
+    return {
+      title: "Doctor Not Found",
+    };
+  }
+
+  const siteUrl = getSiteUrl();
+  const pageUrl = `${siteUrl}/doctors/${doctor.slug}`;
+  const imageUrl = `${siteUrl}${doctor.image}`;
+
+  return {
+    title: `${doctor.name} - ${doctor.speciality}`,
+    description: `${doctor.name}, ${doctor.speciality} at ${hospitalConfig.name}, Nanded. ${doctor.qualifications}, ${doctor.experience}. OPD: ${doctor.opdTimings}.`,
+    alternates: {
+      canonical: pageUrl,
+    },
+    openGraph: {
+      title: `${doctor.name} | ${doctor.speciality} | ${hospitalConfig.name}`,
+      description: doctor.shortBio,
+      url: pageUrl,
+      siteName: hospitalConfig.name,
+      images: [
+        {
+          url: imageUrl,
+          width: 800,
+          height: 1000,
+          alt: `${doctor.name} - ${doctor.speciality}`,
+        },
+      ],
+      locale: "en_IN",
+      type: "profile",
+    },
+  };
 }
 
-export default async function DoctorDetailPage({ params }: PageProps) {
+export default function DoctorDetailPage({ params }: PageProps) {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-white" />}>
+      <DoctorContent params={params} />
+    </Suspense>
+  );
+}
+
+async function DoctorContent({ params }: PageProps) {
   const { slug } = await params;
   const doctor = hospitalConfig.doctors.find((d) => d.slug === slug);
 
@@ -35,12 +82,42 @@ export default async function DoctorDetailPage({ params }: PageProps) {
     return notFound();
   }
 
+  const siteUrl = getSiteUrl();
   const department = hospitalConfig.departments.find(
     (dept) => dept.id === doctor.departmentId
   );
 
+  const physicianJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Physician",
+    name: doctor.name,
+    jobTitle: doctor.speciality,
+    description: doctor.shortBio,
+    image: `${siteUrl}${doctor.image}`,
+    telephone: hospitalConfig.contact.phoneRaw,
+    medicalSpecialty: doctor.speciality,
+    worksFor: {
+      "@type": "Hospital",
+      name: hospitalConfig.name,
+      url: siteUrl,
+      telephone: hospitalConfig.contact.phoneRaw,
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: hospitalConfig.location.address,
+        addressLocality: hospitalConfig.location.city,
+        addressRegion: hospitalConfig.location.state,
+        postalCode: hospitalConfig.location.pincode,
+        addressCountry: "IN",
+      },
+    },
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-white text-[#1F2D2B]">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(physicianJsonLd) }}
+      />
       <TopStrip />
       <Header />
 
@@ -61,7 +138,7 @@ export default async function DoctorDetailPage({ params }: PageProps) {
             </nav>
 
             <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
-              {/* Doctor Portrait Photo (4:5 aspect ratio) */}
+              {/* Doctor Portrait Photo */}
               <div className="md:col-span-5 lg:col-span-4">
                 <div className="relative w-full max-w-sm mx-auto aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl border-2 border-white/20 bg-[#144748]">
                   <Image

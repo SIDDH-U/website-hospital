@@ -27,45 +27,60 @@ export function Footer() {
             <p className="mt-4 text-sm text-white/75 leading-relaxed max-w-sm">
               {hospitalConfig.footer.description}
             </p>
-            {/* Social Icons */}
-            <div className="flex items-center gap-4 mt-6">
-              <a
-                href={hospitalConfig.socials.facebook}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Visit LifeCare on Facebook"
-                className="w-9 h-9 rounded-full bg-[#184E4F] hover:bg-[#CDEBD8] hover:text-[#0F3D3E] text-white flex items-center justify-center transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-[#8FBFA3]"
-              >
-                <FacebookIcon className="w-4 h-4" />
-              </a>
-              <a
-                href={hospitalConfig.socials.instagram}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Visit LifeCare on Instagram"
-                className="w-9 h-9 rounded-full bg-[#184E4F] hover:bg-[#CDEBD8] hover:text-[#0F3D3E] text-white flex items-center justify-center transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-[#8FBFA3]"
-              >
-                <InstagramIcon className="w-4 h-4" />
-              </a>
-              <a
-                href={hospitalConfig.socials.linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Visit LifeCare on LinkedIn"
-                className="w-9 h-9 rounded-full bg-[#184E4F] hover:bg-[#CDEBD8] hover:text-[#0F3D3E] text-white flex items-center justify-center transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-[#8FBFA3]"
-              >
-                <LinkedinIcon className="w-4 h-4" />
-              </a>
-              <a
-                href={hospitalConfig.socials.youtube}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Visit LifeCare on YouTube"
-                className="w-9 h-9 rounded-full bg-[#184E4F] hover:bg-[#CDEBD8] hover:text-[#0F3D3E] text-white flex items-center justify-center transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-[#8FBFA3]"
-              >
-                <YoutubeIcon className="w-4 h-4" />
-              </a>
-            </div>
+            {/* Social Icons (Only render if any social URL is configured) */}
+            {Boolean(
+              hospitalConfig.socials.facebook ||
+                hospitalConfig.socials.instagram ||
+                hospitalConfig.socials.linkedin ||
+                hospitalConfig.socials.youtube
+            ) && (
+              <div className="flex items-center gap-4 mt-6">
+                {hospitalConfig.socials.facebook && (
+                  <a
+                    href={hospitalConfig.socials.facebook}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Visit LifeCare on Facebook"
+                    className="w-9 h-9 rounded-full bg-[#184E4F] hover:bg-[#CDEBD8] hover:text-[#0F3D3E] text-white flex items-center justify-center transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-[#8FBFA3]"
+                  >
+                    <FacebookIcon className="w-4 h-4" />
+                  </a>
+                )}
+                {hospitalConfig.socials.instagram && (
+                  <a
+                    href={hospitalConfig.socials.instagram}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Visit LifeCare on Instagram"
+                    className="w-9 h-9 rounded-full bg-[#184E4F] hover:bg-[#CDEBD8] hover:text-[#0F3D3E] text-white flex items-center justify-center transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-[#8FBFA3]"
+                  >
+                    <InstagramIcon className="w-4 h-4" />
+                  </a>
+                )}
+                {hospitalConfig.socials.linkedin && (
+                  <a
+                    href={hospitalConfig.socials.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Visit LifeCare on LinkedIn"
+                    className="w-9 h-9 rounded-full bg-[#184E4F] hover:bg-[#CDEBD8] hover:text-[#0F3D3E] text-white flex items-center justify-center transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-[#8FBFA3]"
+                  >
+                    <LinkedinIcon className="w-4 h-4" />
+                  </a>
+                )}
+                {hospitalConfig.socials.youtube && (
+                  <a
+                    href={hospitalConfig.socials.youtube}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Visit LifeCare on YouTube"
+                    className="w-9 h-9 rounded-full bg-[#184E4F] hover:bg-[#CDEBD8] hover:text-[#0F3D3E] text-white flex items-center justify-center transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-[#8FBFA3]"
+                  >
+                    <YoutubeIcon className="w-4 h-4" />
+                  </a>
+                )}
+              </div>
+            )}
           </div>
 
           {/* Column 2: Quick Links (2 cols) */}
@@ -284,50 +299,65 @@ export function Footer() {
             </div>
           </div>
 
-          {/* Follow Us / Social Icons */}
-          <div>
-            <h4 className="text-xs font-extrabold uppercase tracking-widest text-[#CDEBD8] mb-3">
-              Follow Us
-            </h4>
-            <div className="flex items-center gap-3">
-              <a
-                href={hospitalConfig.socials.instagram}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Instagram"
-                className="w-10 h-10 rounded-full bg-[#184E4F] text-white flex items-center justify-center hover:bg-[#CDEBD8] hover:text-[#0F3D3E] transition-all card-press"
-              >
-                <InstagramIcon className="w-4 h-4" />
-              </a>
-              <a
-                href={hospitalConfig.socials.facebook}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Facebook"
-                className="w-10 h-10 rounded-full bg-[#184E4F] text-white flex items-center justify-center hover:bg-[#CDEBD8] hover:text-[#0F3D3E] transition-all card-press"
-              >
-                <FacebookIcon className="w-4 h-4" />
-              </a>
-              <a
-                href={hospitalConfig.socials.youtube}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="YouTube"
-                className="w-10 h-10 rounded-full bg-[#184E4F] text-white flex items-center justify-center hover:bg-[#CDEBD8] hover:text-[#0F3D3E] transition-all card-press"
-              >
-                <YoutubeIcon className="w-4 h-4" />
-              </a>
-              <a
-                href={hospitalConfig.socials.linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="LinkedIn"
-                className="w-10 h-10 rounded-full bg-[#184E4F] text-white flex items-center justify-center hover:bg-[#CDEBD8] hover:text-[#0F3D3E] transition-all card-press"
-              >
-                <LinkedinIcon className="w-4 h-4" />
-              </a>
+          {/* Follow Us / Social Icons (Only render if any social URL is configured) */}
+          {Boolean(
+            hospitalConfig.socials.facebook ||
+              hospitalConfig.socials.instagram ||
+              hospitalConfig.socials.linkedin ||
+              hospitalConfig.socials.youtube
+          ) && (
+            <div>
+              <h4 className="text-xs font-extrabold uppercase tracking-widest text-[#CDEBD8] mb-3">
+                Follow Us
+              </h4>
+              <div className="flex items-center gap-3">
+                {hospitalConfig.socials.instagram && (
+                  <a
+                    href={hospitalConfig.socials.instagram}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Instagram"
+                    className="w-10 h-10 rounded-full bg-[#184E4F] text-white flex items-center justify-center hover:bg-[#CDEBD8] hover:text-[#0F3D3E] transition-all card-press"
+                  >
+                    <InstagramIcon className="w-4 h-4" />
+                  </a>
+                )}
+                {hospitalConfig.socials.facebook && (
+                  <a
+                    href={hospitalConfig.socials.facebook}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Facebook"
+                    className="w-10 h-10 rounded-full bg-[#184E4F] text-white flex items-center justify-center hover:bg-[#CDEBD8] hover:text-[#0F3D3E] transition-all card-press"
+                  >
+                    <FacebookIcon className="w-4 h-4" />
+                  </a>
+                )}
+                {hospitalConfig.socials.youtube && (
+                  <a
+                    href={hospitalConfig.socials.youtube}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="YouTube"
+                    className="w-10 h-10 rounded-full bg-[#184E4F] text-white flex items-center justify-center hover:bg-[#CDEBD8] hover:text-[#0F3D3E] transition-all card-press"
+                  >
+                    <YoutubeIcon className="w-4 h-4" />
+                  </a>
+                )}
+                {hospitalConfig.socials.linkedin && (
+                  <a
+                    href={hospitalConfig.socials.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="LinkedIn"
+                    className="w-10 h-10 rounded-full bg-[#184E4F] text-white flex items-center justify-center hover:bg-[#CDEBD8] hover:text-[#0F3D3E] transition-all card-press"
+                  >
+                    <LinkedinIcon className="w-4 h-4" />
+                  </a>
+                )}
+              </div>
             </div>
-          </div>
+          )}
         </div>
 
         {/* Thin Divider & Bottom Legal Row */}

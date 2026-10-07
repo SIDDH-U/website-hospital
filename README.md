@@ -6,6 +6,28 @@ Built with **Next.js 16 (App Router)**, **Tailwind CSS**, and **TypeScript**. Ov
 
 ---
 
+## ⚠️ Pre-Launch Checklist: Placeholders to Replace
+
+Before pointing the live production domain (`lifecarehospital-nanded.com`) to this codebase, the following placeholder and invented demo items must be reviewed and replaced with genuine hospital credentials and information in `src/config/hospital.ts` and `public/images/`:
+
+| Item / Category | Current Demo Placeholder | Where to Update | Notes & Replacement Requirement |
+|---|---|---|---|
+| **Doctor Profiles** | 8 simulated doctors (`Dr. Rajesh Sharma`, `Dr. Priya Patel`, etc.) | `src/config/hospital.ts` (`doctors` array) | Replace names, qualifications, department IDs, OPD timings, and short bios with actual hospital doctors. |
+| **Doctor Photos** | Demo portraits in `/public/images/doctors/` | `public/images/doctors/` & `src/config/hospital.ts` | Replace with authentic, high-resolution portrait photographs (4:5 aspect ratio) of real hospital staff. |
+| **Years of Experience** | `"25+"` years of healthcare excellence | `src/config/hospital.ts` (`about.yearsOfCare`) | Update to reflect the actual founding year and operational history. |
+| **Establishment Claims** | "More Than Two Decades", "since 2001" | `src/config/hospital.ts` (`about.paragraph`, `hero`) | Align with actual hospital accreditation and incorporation history. |
+| **Patient Volume Count** | `"10K+ Happy Patients"` / `"10,000+ families"` | `src/config/hospital.ts` (`hero.badgePatients`, `about`) | Update with actual verified patient footfall / registration records. |
+| **Ratings & Review Count** | `"4.9/5"` from `"10,000+ reviews"` | `src/config/hospital.ts` (`about.ratingScore`, `about.ratingCount`) | Connect to real Google Business Profile or Practo rating stats. |
+| **Department Facility Claims** | Specific equipment (Digital Cath Lab, Level III NICU, Computer-Navigated Ortho) | `src/config/hospital.ts` (`departments` array) | Verify conditions treated and specific facilities/machines available in each department. |
+| **Hospital Physical Address** | `123 Healthcare Road, Nanded, Maharashtra 431601` | `src/config/hospital.ts` (`location` object) | Replace with real physical hospital premises address, pincode, and Google Maps CID URL. |
+| **Contact Phone & Hotlines** | `+91 80800 76322` | `src/config/hospital.ts` (`contact` object) | Verify front desk reception, ambulance hotline, and casualty numbers. |
+| **Official Email Address** | `info@lifecarehospital.com` | `src/config/hospital.ts` (`contact.email`) | Update to genuine hospital domain email inbox. |
+| **Social Media URLs** | Currently set to empty strings (`""`) | `src/config/hospital.ts` (`socials` object) | Add verified Facebook, Instagram, LinkedIn, and YouTube profile URLs once created. |
+| **Blog Articles** | 3 demo health articles and author attributions | `src/config/hospital.ts` (`blogArticles` array) | Replace with real articles written or medically reviewed by hospital consultants. |
+| **Site URL & Domain** | `NEXT_PUBLIC_SITE_URL` env variable | Vercel Environment Variables & DNS | Set `NEXT_PUBLIC_SITE_URL=https://lifecarehospital-nanded.com` to enable search indexing (`robots.ts`). |
+
+---
+
 ## 📄 Complete Page Directory & Routes
 
 All routes are fully implemented with zero dead links or broken placeholders:

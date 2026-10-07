@@ -1,10 +1,27 @@
 import React from "react";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { TopStrip } from "@/components/TopStrip";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { StickyActionBar } from "@/components/StickyActionBar";
-import { hospitalConfig } from "@/config/hospital";
+import { hospitalConfig, getSiteUrl } from "@/config/hospital";
+
+export const metadata: Metadata = {
+  title: "Terms of Service",
+  description: `Terms of service and patient consultation guidelines for ${hospitalConfig.name}, Nanded.`,
+  alternates: {
+    canonical: `${getSiteUrl()}/terms`,
+  },
+  openGraph: {
+    title: `Terms of Service | ${hospitalConfig.name}`,
+    description: `Terms and conditions for hospital services and consultations at ${hospitalConfig.name}, Nanded.`,
+    url: `${getSiteUrl()}/terms`,
+    siteName: hospitalConfig.name,
+    locale: "en_IN",
+    type: "website",
+  },
+};
 
 export default function TermsPage() {
   return (

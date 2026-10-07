@@ -24,7 +24,7 @@ export function LifeCareLogo({
     <Link
       href="/"
       className={`inline-flex items-center gap-2.5 group focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0F3D3E] rounded-lg p-0.5 ${className}`}
-      aria-label="LifeCare Hospital Homepage"
+      aria-label="LifeCare Hospital home"
     >
       {/* Leaf and Cross Emblem */}
       <svg

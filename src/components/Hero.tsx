@@ -66,44 +66,46 @@ export function Hero({ onOpenBooking }: HeroProps) {
       ref={heroRef}
       id="hero"
       aria-labelledby="hero-heading"
-      className={`relative bg-[#0F3D3E] text-white rounded-b-[36px] sm:rounded-b-[48px] lg:rounded-b-[60px] overflow-hidden ${
+      className={`relative bg-[#0F3D3E] text-white rounded-b-[36px] sm:rounded-b-[48px] lg:rounded-b-[60px] overflow-hidden flex flex-col lg:block ${
         !isHeroActive ? "hero-paused" : ""
       }`}
     >
       {/* ========================================================
-          DESKTOP HERO BACKGROUND (1024px+)
-          Photo covers right 60%, horizontal gradient mask fading from left
-          Teal tint layer (rgba(15,61,62,.28) multiply) and filter saturate(.9)
+          RESPONSIVE HERO BACKGROUND PHOTO
+          Mobile (< 1024px): Sits at bottom with vertical mask fade
+          Desktop (1024px+): Covers right 60% with horizontal mask fade
+          Picture element ensures ONLY ONE image is downloaded based on viewport width
          ======================================================== */}
       <div
-        className="hidden lg:block absolute inset-y-0 right-0 w-[60%] pointer-events-none z-0 overflow-hidden"
-        style={{
-          WebkitMaskImage:
-            "linear-gradient(to right, transparent 0%, rgba(0,0,0,0.06) 5%, rgba(0,0,0,0.18) 10%, rgba(0,0,0,0.35) 15%, rgba(0,0,0,0.68) 26%, rgba(0,0,0,0.92) 36%, #000000 45%)",
-          maskImage:
-            "linear-gradient(to right, transparent 0%, rgba(0,0,0,0.06) 5%, rgba(0,0,0,0.18) 10%, rgba(0,0,0,0.35) 15%, rgba(0,0,0,0.68) 26%, rgba(0,0,0,0.92) 36%, #000000 45%)",
-        }}
+        className="relative w-full aspect-[4/5] -mt-8 overflow-hidden z-0 order-2 lg:order-none lg:mt-0 lg:aspect-auto lg:absolute lg:inset-y-0 lg:right-0 lg:w-[60%] lg:pointer-events-none"
         aria-hidden="true"
       >
         {/* Soft mint radial glow pulsing behind doctors */}
         <div
-          className="mint-glow-pulse absolute inset-0 bg-[radial-gradient(circle_at_65%_35%,rgba(205,235,216,0.35)_0%,transparent_70%)] pointer-events-none z-10"
+          className="mint-glow-pulse absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,rgba(205,235,216,0.3)_0%,transparent_65%)] lg:bg-[radial-gradient(circle_at_65%_35%,rgba(205,235,216,0.35)_0%,transparent_70%)] pointer-events-none z-10"
         />
 
-        {/* Desktop Image with slow zoom */}
-        <div className="relative w-full h-full hero-photo-zoom">
-          <Image
-            src="/images/hero-desktop.webp"
-            alt="LifeCare Hospital senior doctors and medical team"
-            fill
-            priority
-            fetchPriority="high"
-            sizes="(min-width: 1024px) 60vw, 100vw"
-            placeholder="blur"
-            blurDataURL={HERO_DESKTOP_BLUR}
-            className="object-cover object-[65%_30%]"
-            style={{ filter: "saturate(0.9)" }}
-          />
+        {/* Masked photo container with responsive gradient mask */}
+        <div className="relative w-full h-full hero-photo-zoom hero-photo-mask">
+          <picture className="w-full h-full">
+            <source
+              media="(min-width: 1024px)"
+              srcSet="/images/hero-desktop.webp"
+              width={1200}
+              height={675}
+            />
+            <img
+              src="/images/hero-mobile.webp"
+              alt="LifeCare Hospital senior doctors and medical team"
+              width={800}
+              height={1000}
+              fetchPriority="high"
+              loading="eager"
+              className="w-full h-full object-cover object-top lg:object-[65%_30%]"
+              style={{ filter: "saturate(0.9)" }}
+            />
+          </picture>
+
           {/* Teal tint overlay */}
           <div
             className="absolute inset-0 bg-[#0F3D3E]/[0.28] pointer-events-none"
@@ -114,10 +116,10 @@ export function Hero({ onOpenBooking }: HeroProps) {
 
       {/* ========================================================
           HERO CONTENT CONTAINER
-          Mobile: Column layout, text block sits ENTIRELY on solid teal
-          No part of photo behind text or buttons
+          Mobile: Top block in column layout
+          Desktop: Left column over solid teal
          ======================================================== */}
-      <div className="relative z-10 max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 pt-7 sm:pt-10 lg:py-24">
+      <div className="relative z-10 max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 pt-7 sm:pt-10 lg:py-24 order-1 lg:order-none">
         {/* Text Block on Solid Teal */}
         <div className="max-w-xl lg:max-w-2xl flex flex-col items-start">
           {/* 1. Rating Chip (Load sequence 1) */}
@@ -135,16 +137,19 @@ export function Hero({ onOpenBooking }: HeroProps) {
           {/* 2 & 3. Headline with 2 staggered lines (Load sequence 2 & 3) */}
           <h1
             id="hero-heading"
+            aria-label={`${hospitalConfig.hero.headingPrefix} ${hospitalConfig.hero.headingRest}`}
             className="hero-h1 font-extrabold text-white tracking-tight text-left max-w-xl drop-shadow-sm text-balance"
           >
-            {/* Headline Line 1 */}
-            <span className="hero-seq-2 block">
-              <span className="healing-shimmer">{hospitalConfig.hero.headingPrefix}</span>{" "}
-              Begins
-            </span>
-            {/* Headline Line 2 */}
-            <span className="hero-seq-3 block">
-              The Moment You Walk In
+            <span aria-hidden="true">
+              {/* Headline Line 1 */}
+              <span className="hero-seq-2 block">
+                <span className="healing-shimmer">{hospitalConfig.hero.headingPrefix}</span>{" "}
+                Begins
+              </span>
+              {/* Headline Line 2 */}
+              <span className="hero-seq-3 block">
+                The Moment You Walk In
+              </span>
             </span>
           </h1>
 
@@ -159,7 +164,7 @@ export function Hero({ onOpenBooking }: HeroProps) {
             id="hero-cta-buttons"
             className="hero-seq-5 mt-6 sm:mt-7 w-full flex flex-row max-[359px]:flex-col items-stretch sm:items-center gap-3"
           >
-            {/* Primary Book Appointment Button (flex: 1, 48px, idle shine, ripple) */}
+            {/* Primary Book Appointment Button */}
             <Link
               ref={bookBtnRef}
               href="/book"
@@ -188,7 +193,7 @@ export function Hero({ onOpenBooking }: HeroProps) {
               ))}
             </Link>
 
-            {/* Call Us Button (width: auto, 48px, SOLID #185553, 1px border rgba(205,235,216,.35), white text) */}
+            {/* Call Us Button */}
             <a
               ref={callBtnRef}
               href={`tel:${hospitalConfig.contact.emergencyPhoneRaw}`}
@@ -217,50 +222,6 @@ export function Hero({ onOpenBooking }: HeroProps) {
               ))}
             </a>
           </div>
-        </div>
-      </div>
-
-      {/* ========================================================
-          MOBILE HERO PHOTO BLOCK (< 1024px)
-          Column layout: sits BELOW the buttons with margin-top: -32px (-mt-8)
-          Full width, aspect 4:5
-          Eased linear-gradient mask to blend seamlessly into teal
-          Teal tint multiply layer & filter saturate(.9)
-         ======================================================== */}
-      <div className="lg:hidden relative w-full aspect-[4/5] -mt-8 overflow-hidden z-0">
-        {/* Soft mint radial glow pulsing behind doctors on mobile */}
-        <div
-          className="mint-glow-pulse absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,rgba(205,235,216,0.3)_0%,transparent_65%)] pointer-events-none z-10"
-        />
-
-        {/* Masked photo container */}
-        <div
-          className="relative w-full h-full hero-photo-zoom"
-          style={{
-            WebkitMaskImage:
-              "linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.06) 6%, rgba(0,0,0,0.18) 12%, rgba(0,0,0,0.35) 18%, rgba(0,0,0,0.65) 28%, rgba(0,0,0,0.9) 38%, #000000 45%)",
-            maskImage:
-              "linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.06) 6%, rgba(0,0,0,0.18) 12%, rgba(0,0,0,0.35) 18%, rgba(0,0,0,0.65) 28%, rgba(0,0,0,0.9) 38%, #000000 45%)",
-          }}
-        >
-          <Image
-            src="/images/hero-mobile.webp"
-            alt="LifeCare Hospital Doctor and Nurse Specialist"
-            fill
-            priority
-            fetchPriority="high"
-            sizes="(max-width: 1023px) 100vw, 50vw"
-            placeholder="blur"
-            blurDataURL={HERO_MOBILE_BLUR}
-            className="object-cover object-top"
-            style={{ filter: "saturate(0.9)" }}
-          />
-
-          {/* Teal tint overlay */}
-          <div
-            className="absolute inset-0 bg-[#0F3D3E]/[0.28] pointer-events-none"
-            style={{ mixBlendMode: "multiply" }}
-          />
         </div>
       </div>
     </section>

@@ -1,9 +1,27 @@
 import React from "react";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { TopStrip } from "@/components/TopStrip";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { hospitalConfig } from "@/config/hospital";
+import { StickyActionBar } from "@/components/StickyActionBar";
+import { hospitalConfig, getSiteUrl } from "@/config/hospital";
+
+export const metadata: Metadata = {
+  title: "Privacy Policy",
+  description: `Privacy policy and health data confidentiality standards of ${hospitalConfig.name}, Nanded.`,
+  alternates: {
+    canonical: `${getSiteUrl()}/privacy`,
+  },
+  openGraph: {
+    title: `Privacy Policy | ${hospitalConfig.name}`,
+    description: `Patient privacy and data protection policies at ${hospitalConfig.name}, Nanded.`,
+    url: `${getSiteUrl()}/privacy`,
+    siteName: hospitalConfig.name,
+    locale: "en_IN",
+    type: "website",
+  },
+};
 
 export default function PrivacyPage() {
   return (
@@ -12,6 +30,14 @@ export default function PrivacyPage() {
       <Header />
 
       <main className="flex-1 max-w-[900px] mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
+        <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs font-semibold text-[#2DA870] mb-4">
+          <Link href="/" className="hover:underline">
+            Home
+          </Link>
+          <span>/</span>
+          <span className="text-[#536462]">Privacy Policy</span>
+        </nav>
+
         <h1 className="text-3xl font-extrabold text-[#0F3D3E] mb-6">
           Privacy Policy
         </h1>
@@ -34,7 +60,7 @@ export default function PrivacyPage() {
           <div className="pt-8">
             <Link
               href="/"
-              className="inline-flex items-center px-6 py-2.5 rounded-full bg-[#0F3D3E] text-white font-bold text-sm"
+              className="inline-flex items-center px-6 py-2.5 rounded-full bg-[#0F3D3E] text-white font-bold text-sm btn-press btn-teal shadow"
             >
               ← Back to Homepage
             </Link>
@@ -43,6 +69,7 @@ export default function PrivacyPage() {
       </main>
 
       <Footer />
+      <StickyActionBar />
     </div>
   );
 }

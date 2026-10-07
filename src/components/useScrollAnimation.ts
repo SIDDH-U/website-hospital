@@ -84,17 +84,24 @@ export function useHeaderScroll() {
   return isScrolled;
 }
 
-// Counter animation hook
+// Counter animation hook - SSR returns target value, client counts up when visible
 export function useCountUp(target: number, isVisible: boolean, duration: number = 1200, decimals: number = 0) {
-  const [count, setCount] = useState(0);
+  // Initialize with target so SSR HTML contains final value for SEO and accessibility
+  const [count, setCount] = useState(target);
+  const [hasAnimated, setHasAnimated] = useState(false);
 
   useEffect(() => {
-    if (!isVisible) return;
+    if (!isVisible || hasAnimated) return;
+    setHasAnimated(true);
+
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (prefersReducedMotion) {
       setCount(target);
       return;
     }
+
+    // Start count up from 0
+    setCount(0);
 
     let startTime: number | null = null;
     let animationFrame: number;
@@ -113,7 +120,7 @@ export function useCountUp(target: number, isVisible: boolean, duration: number 
 
     animationFrame = requestAnimationFrame(step);
     return () => cancelAnimationFrame(animationFrame);
-  }, [target, isVisible, duration, decimals]);
+  }, [target, isVisible, duration, decimals, hasAnimated]);
 
   return count;
 }

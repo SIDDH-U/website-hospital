@@ -1,10 +1,27 @@
 import React from "react";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { TopStrip } from "@/components/TopStrip";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { StickyActionBar } from "@/components/StickyActionBar";
-import { hospitalConfig } from "@/config/hospital";
+import { hospitalConfig, getSiteUrl } from "@/config/hospital";
+
+export const metadata: Metadata = {
+  title: "Privacy Policy",
+  description: `Privacy policy and health data confidentiality standards of ${hospitalConfig.name}, Nanded.`,
+  alternates: {
+    canonical: `${getSiteUrl()}/privacy-policy`,
+  },
+  openGraph: {
+    title: `Privacy Policy | ${hospitalConfig.name}`,
+    description: `Patient privacy and data protection policies at ${hospitalConfig.name}, Nanded.`,
+    url: `${getSiteUrl()}/privacy-policy`,
+    siteName: hospitalConfig.name,
+    locale: "en_IN",
+    type: "website",
+  },
+};
 
 export default function PrivacyPolicyPage() {
   return (

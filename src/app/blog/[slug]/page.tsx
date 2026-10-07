@@ -1,14 +1,19 @@
-import React from "react";
+import React, { Suspense } from "react";
+import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { hospitalConfig } from "@/config/hospital";
+import { hospitalConfig, getSiteUrl } from "@/config/hospital";
 import { TopStrip } from "@/components/TopStrip";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { StickyActionBar } from "@/components/StickyActionBar";
 import { CtaBanner } from "@/components/CtaBanner";
-import { ArrowRightIcon, CalendarIcon } from "@/components/Icons";
+import { CalendarIcon } from "@/components/Icons";
+
+interface PageProps {
+  params: Promise<{ slug: string }>;
+}
 
 export function generateStaticParams() {
   return hospitalConfig.blogArticles.map((article) => ({
@@ -16,11 +21,54 @@ export function generateStaticParams() {
   }));
 }
 
-interface PageProps {
-  params: Promise<{ slug: string }>;
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const article = hospitalConfig.blogArticles.find((a) => a.slug === slug);
+
+  if (!article) {
+    return {
+      title: "Article Not Found",
+    };
+  }
+
+  const siteUrl = getSiteUrl();
+  const pageUrl = `${siteUrl}/blog/${article.slug}`;
+  const imageUrl = `${siteUrl}${article.image}`;
+
+  return {
+    title: article.title,
+    description: article.excerpt,
+    alternates: {
+      canonical: pageUrl,
+    },
+    openGraph: {
+      title: `${article.title} | ${hospitalConfig.name}`,
+      description: article.excerpt,
+      url: pageUrl,
+      siteName: hospitalConfig.name,
+      images: [
+        {
+          url: imageUrl,
+          width: 1200,
+          height: 630,
+          alt: article.title,
+        },
+      ],
+      locale: "en_IN",
+      type: "article",
+    },
+  };
 }
 
-export default async function BlogDetailPage({ params }: PageProps) {
+export default function BlogDetailPage({ params }: PageProps) {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-white" />}>
+      <BlogContent params={params} />
+    </Suspense>
+  );
+}
+
+async function BlogContent({ params }: PageProps) {
   const { slug } = await params;
   const article = hospitalConfig.blogArticles.find((a) => a.slug === slug);
 
@@ -28,8 +76,31 @@ export default async function BlogDetailPage({ params }: PageProps) {
     return notFound();
   }
 
+  const siteUrl = getSiteUrl();
+  const articleJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: article.title,
+    description: article.excerpt,
+    image: `${siteUrl}${article.image}`,
+    author: {
+      "@type": "Person",
+      "name": article.author,
+    },
+    publisher: {
+      "@type": "Hospital",
+      "name": hospitalConfig.name,
+      "url": siteUrl,
+    },
+    mainEntityOfPage: `${siteUrl}/blog/${article.slug}`,
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-white text-[#1F2D2B]">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+      />
       <TopStrip />
       <Header />
 

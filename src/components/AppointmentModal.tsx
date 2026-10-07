@@ -156,7 +156,7 @@ export function AppointmentModal({
                 Schedule An Appointment
               </h2>
               <p className="text-sm text-[#536462] mt-1">
-                Fill out the quick form below. Our reception desk will call back within 15 minutes to confirm.
+                Fill out the quick form below. {hospitalConfig.callbackText}.
               </p>
             </div>
 
@@ -244,7 +244,6 @@ export function AppointmentModal({
                     </option>
                   ))}
                   <option value="General Health Checkup">General Health Checkup</option>
-                  <option value="Emergency Consultation">Emergency Consultation</option>
                 </select>
               </div>
 

@@ -1,13 +1,38 @@
 import React from "react";
+import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
-import { hospitalConfig } from "@/config/hospital";
+import { hospitalConfig, getSiteUrl } from "@/config/hospital";
 import { TopStrip } from "@/components/TopStrip";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { StickyActionBar } from "@/components/StickyActionBar";
 import { CtaBanner } from "@/components/CtaBanner";
 import { ArrowRightIcon } from "@/components/Icons";
+
+export const metadata: Metadata = {
+  title: "Health & Wellness Blog",
+  description: `Read verified health tips, disease prevention guidance, and medical articles written by doctors and specialists at ${hospitalConfig.name}, Nanded.`,
+  alternates: {
+    canonical: `${getSiteUrl()}/blog`,
+  },
+  openGraph: {
+    title: `Health & Wellness Blog | ${hospitalConfig.name}`,
+    description: `Practical healthcare articles and wellness guides from the medical faculty at ${hospitalConfig.name}, Nanded.`,
+    url: `${getSiteUrl()}/blog`,
+    siteName: hospitalConfig.name,
+    images: [
+      {
+        url: `${getSiteUrl()}/images/hero-desktop.webp`,
+        width: 1200,
+        height: 630,
+        alt: `Health Blog at ${hospitalConfig.name}`,
+      },
+    ],
+    locale: "en_IN",
+    type: "website",
+  },
+};
 
 export default function BlogIndexPage() {
   return (
@@ -57,7 +82,7 @@ export default function BlogIndexPage() {
                       src={article.image}
                       alt={article.title}
                       fill
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      sizes="(max-width: 768px) 100vw, 33vw"
                       className="object-cover hover-img-zoom"
                       loading="lazy"
                     />
