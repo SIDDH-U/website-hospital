@@ -1,0 +1,577 @@
+@import "tailwindcss";
+
+@layer theme {
+  :root {
+    --color-teal-deep: #0F3D3E;
+    --color-teal-dark: #0A2B2C;
+    --color-teal-active: #175354;
+    --color-mint: #CDEBD8;
+    --color-mint-active: #B2E0C2;
+    --color-mint-light: #EBF7F0;
+    --color-sage: #8FBFA3;
+    --color-cream: #F7F5EF;
+    --color-charcoal: #1F2D2B;
+    --color-charcoal-muted: #536462;
+    --color-emergency: #E53E3E;
+  }
+}
+
+@theme {
+  --color-teal-deep: #0F3D3E;
+  --color-teal-dark: #0A2B2C;
+  --color-teal-active: #175354;
+  --color-mint: #CDEBD8;
+  --color-mint-active: #B2E0C2;
+  --color-mint-light: #EBF7F0;
+  --color-sage: #8FBFA3;
+  --color-cream: #F7F5EF;
+  --color-charcoal: #1F2D2B;
+  --color-charcoal-muted: #536462;
+  --color-emergency: #E53E3E;
+
+  --font-sans: var(--font-plus-jakarta), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+/* Touch-first base styles */
+html {
+  scroll-behavior: smooth;
+  font-family: var(--font-plus-jakarta), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: #1F2D2B;
+  background-color: #FFFFFF;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+body {
+  font-family: var(--font-plus-jakarta), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: #1F2D2B;
+  background-color: #FFFFFF;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Ensure no 300ms tap delay and transparent tap highlight */
+button, a, input, select, textarea {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+/* Section F: Form inputs must be 16px to prevent iOS auto-zoom */
+input, select, textarea {
+  font-size: 16px !important;
+}
+
+/* Text wrap balance on headings */
+h1, h2, h3, h4, .text-balance {
+  text-wrap: balance;
+}
+
+/* Fluid responsive h1 heading */
+.hero-h1 {
+  font-size: clamp(2rem, 6.5vw, 3.5rem);
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+}
+
+/* Focus-visible ring in sage on all interactive elements */
+:focus-visible {
+  outline: 2px solid #8FBFA3 !important;
+  outline-offset: 2px !important;
+}
+
+/* Touch-First Press Feedback on ALL Devices */
+.btn-press {
+  transition: transform 200ms cubic-bezier(0.4, 0, 0.2, 1), background-color 200ms cubic-bezier(0.4, 0, 0.2, 1), box-shadow 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+
+.btn-press:active {
+  transform: scale(0.97);
+  transition-duration: 120ms;
+}
+
+/* Mint buttons get deeper mint on press */
+.btn-mint:active {
+  background-color: #B2E0C2 !important;
+}
+
+/* Teal buttons get slightly lighter teal on press */
+.btn-teal:active {
+  background-color: #175354 !important;
+}
+
+/* Interactive Card Press Feedback */
+.card-press {
+  transition: transform 200ms cubic-bezier(0.4, 0, 0.2, 1), box-shadow 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-press:active {
+  transform: scale(0.98);
+  transition-duration: 120ms;
+}
+
+.card-press:active .card-arrow-icon {
+  transform: translateX(3px);
+  transition-duration: 120ms;
+}
+
+.card-arrow-icon {
+  transition: transform 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Desktop-Only Hover Effects (never stick on touch screens) */
+@media (hover: hover) and (pointer: fine) {
+  .card-hover-shadow {
+    transition: transform 250ms cubic-bezier(0.4, 0, 0.2, 1), box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .card-hover-shadow:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px -4px rgba(15, 61, 62, 0.1), 0 4px 10px -2px rgba(15, 61, 62, 0.05);
+  }
+  .card-hover-shadow:hover .card-arrow-icon {
+    transform: translateX(3px);
+  }
+  .card-hover-shadow:hover .hover-img-zoom {
+    transform: scale(1.04);
+  }
+}
+
+/* Touch devices scroll-driven active card state */
+@media (hover: none) {
+  .touch-middle-active {
+    box-shadow: 0 8px 24px -3px rgba(15, 61, 62, 0.08);
+  }
+  .touch-middle-active .touch-icon-fill {
+    background-color: #0F3D3E !important;
+    color: #CDEBD8 !important;
+  }
+  .touch-middle-active .touch-img-zoom {
+    transform: scale(1.04);
+    transition: transform 600ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
+/* Infinite continuous doctors loop */
+@keyframes scrollDoctors {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.doctors-marquee-track {
+  display: flex;
+  width: max-content;
+  animation: scrollDoctors var(--doctors-scroll-duration, 32s) linear infinite;
+  will-change: transform;
+}
+
+/* Pause on hover, focus-within, and active touch */
+.doctors-marquee-container:hover .doctors-marquee-track,
+.doctors-marquee-container:focus-within .doctors-marquee-track,
+.doctors-marquee-container:active .doctors-marquee-track {
+  animation-play-state: paused;
+}
+
+/* Hide sticky bottom bar when mobile menu is open */
+body.mobile-menu-open #sticky-bottom-bar {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+/* Scroll reveal motion classes */
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 500ms cubic-bezier(0.4, 0, 0.2, 1), transform 500ms cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: opacity, transform;
+}
+
+.reveal-on-scroll.is-revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.stagger-1 { transition-delay: 0ms; }
+.stagger-2 { transition-delay: 70ms; }
+.stagger-3 { transition-delay: 140ms; }
+.stagger-4 { transition-delay: 210ms; }
+.stagger-5 { transition-delay: 280ms; }
+.stagger-6 { transition-delay: 350ms; }
+
+/* ========================================================
+   SECTION B: HERO MOTION (14px fade-up, 600ms, 90ms apart)
+   ======================================================== */
+@keyframes heroFadeUp14 {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-seq-1 { animation: heroFadeUp14 600ms cubic-bezier(0.16, 1, 0.3, 1) 0ms forwards; opacity: 0; }
+.hero-seq-2 { animation: heroFadeUp14 600ms cubic-bezier(0.16, 1, 0.3, 1) 90ms forwards; opacity: 0; }
+.hero-seq-3 { animation: heroFadeUp14 600ms cubic-bezier(0.16, 1, 0.3, 1) 180ms forwards; opacity: 0; }
+.hero-seq-4 { animation: heroFadeUp14 600ms cubic-bezier(0.16, 1, 0.3, 1) 270ms forwards; opacity: 0; }
+.hero-seq-5 { animation: heroFadeUp14 600ms cubic-bezier(0.16, 1, 0.3, 1) 360ms forwards; opacity: 0; }
+
+/* The word "Healing": soft mint shimmer sweeps once then repeats every 8s */
+@keyframes mintShimmer {
+  0%, 82% {
+    background-position: -200% center;
+  }
+  92%, 100% {
+    background-position: 200% center;
+  }
+}
+
+.healing-shimmer {
+  background: linear-gradient(105deg, #CDEBD8 0%, #CDEBD8 35%, #FFFFFF 50%, #CDEBD8 65%, #CDEBD8 100%);
+  background-size: 250% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: mintShimmer 8s ease-in-out infinite;
+}
+
+/* Star Twinkle every 5 seconds */
+@keyframes starTwinkle {
+  0%, 76% {
+    transform: scale(1);
+  }
+  88% {
+    transform: scale(1.25);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.star-twinkle {
+  display: inline-block;
+  transform-origin: center;
+  animation: starTwinkle 5s ease-in-out infinite;
+}
+
+/* Hero photo slow zoom 1.0 to 1.06 over 20s alternate */
+@keyframes heroSlowZoom {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.06);
+  }
+}
+
+.hero-photo-zoom {
+  transform-origin: 65% 32%;
+  animation: heroSlowZoom 20s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+/* Soft mint radial glow pulsing between 15% and 25% opacity over 6s */
+@keyframes glowPulse {
+  0% {
+    opacity: 0.15;
+  }
+  100% {
+    opacity: 0.25;
+  }
+}
+
+.mint-glow-pulse {
+  animation: glowPulse 6s ease-in-out infinite alternate;
+  will-change: opacity;
+}
+
+/* ========================================================
+   SECTION C: BUTTON IDLE SHINE & PHONE RING WIGGLE
+   ======================================================== */
+@keyframes idleShineSweep {
+  0% {
+    opacity: 0;
+    transform: translateX(-150%) skewX(-25deg);
+  }
+  3% {
+    opacity: 1;
+  }
+  22% {
+    opacity: 1;
+    transform: translateX(250%) skewX(-25deg);
+  }
+  24%, 100% {
+    opacity: 0;
+    transform: translateX(250%) skewX(-25deg);
+  }
+}
+
+.btn-idle-shine {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-idle-shine::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 20px;
+  height: 100%;
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.35) 50%, transparent 100%);
+  opacity: 0;
+  transform: translateX(-150%) skewX(-25deg);
+  pointer-events: none;
+  animation: idleShineSweep 5s ease-in-out infinite;
+  animation-delay: var(--shine-delay, 0s);
+  will-change: transform, opacity;
+}
+
+/* Phone icon wiggle (+/-10deg 3 times in 0.7s every 6s) */
+@keyframes phoneRingWiggle {
+  0%, 88% {
+    transform: rotate(0deg);
+  }
+  90% {
+    transform: rotate(-10deg);
+  }
+  92% {
+    transform: rotate(10deg);
+  }
+  94% {
+    transform: rotate(-10deg);
+  }
+  96% {
+    transform: rotate(10deg);
+  }
+  98% {
+    transform: rotate(-5deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+.phone-ring-icon {
+  display: inline-block;
+  transform-origin: center center;
+  animation: phoneRingWiggle 6s ease-in-out infinite;
+}
+
+/* Soft ripple expanding on touch */
+@keyframes rippleAnim {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(3.2);
+    opacity: 0;
+  }
+}
+
+.btn-ripple-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-ripple-circle {
+  position: absolute;
+  border-radius: 9999px;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  animation: rippleAnim 450ms ease-out forwards;
+}
+
+/* Disable idle shine completely (returns to invisible resting state) - NEVER pause mid-sweep */
+.btn-idle-shine.anim-idle-disabled::after,
+.anim-idle-disabled::after,
+.btn-idle-shine.anim-idle-paused::after,
+.anim-idle-paused::after {
+  animation: none !important;
+  opacity: 0 !important;
+  transform: translateX(-150%) skewX(-25deg) !important;
+}
+
+.anim-idle-disabled .phone-ring-icon,
+.anim-idle-paused .phone-ring-icon {
+  animation: none !important;
+}
+
+/* When mobile menu drawer is open, disable background idle animations */
+body.mobile-menu-open .btn-idle-shine::after {
+  animation: none !important;
+  opacity: 0 !important;
+  transform: translateX(-150%) skewX(-25deg) !important;
+}
+
+/* ========================================================
+   SECTION D: WHO WE ARE MOTION (Clip wipe, leaf sway)
+   ======================================================== */
+@keyframes clipPathWipe {
+  0% {
+    clip-path: inset(100% 0 0 0);
+    transform: scale(1.06);
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+    transform: scale(1);
+  }
+}
+
+.about-photo-wipe {
+  clip-path: inset(100% 0 0 0);
+  transform: scale(1.06);
+}
+
+.photo-wipe-reveal {
+  animation: clipPathWipe 700ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: clip-path, transform;
+}
+
+@keyframes leafSway {
+  0%, 100% {
+    transform: rotate(-6deg);
+  }
+  50% {
+    transform: rotate(6deg);
+  }
+}
+
+.leaf-sway {
+  display: inline-block;
+  transform-origin: bottom center;
+  animation: leafSway 4s ease-in-out infinite alternate;
+}
+
+/* Stat chip pop-up */
+.stat-pop-1 {
+  opacity: 0;
+  transform: translateY(12px) scale(0.96);
+  transition: opacity 400ms cubic-bezier(0.16, 1, 0.3, 1), transform 400ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.stat-pop-1.is-popped {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.stat-pop-2 {
+  opacity: 0;
+  transform: translateY(12px) scale(0.96);
+  transition: opacity 400ms cubic-bezier(0.16, 1, 0.3, 1) 120ms, transform 400ms cubic-bezier(0.16, 1, 0.3, 1) 120ms;
+}
+
+.stat-pop-2.is-popped {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* ========================================================
+   SECTION E: CTA BANNER MOTION (Pulse ring, glow drift)
+   ======================================================== */
+@keyframes mintPulseRing {
+  0% {
+    box-shadow: 0 0 0 0 rgba(205, 235, 216, 0.65);
+  }
+  70% {
+    box-shadow: 0 0 0 14px rgba(205, 235, 216, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(205, 235, 216, 0);
+  }
+}
+
+.cta-btn-pulse {
+  animation: mintPulseRing 2.4s ease-out infinite;
+}
+
+@keyframes glowDrift {
+  0% {
+    transform: translate(-20px, -10px);
+  }
+  100% {
+    transform: translate(20px, 15px);
+  }
+}
+
+.cta-glow-drift {
+  animation: glowDrift 12s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+@keyframes ctaPhotoZoom {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.05);
+  }
+}
+
+.cta-photo-zoom {
+  animation: ctaPhotoZoom 14s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+/* Route transition fade */
+@keyframes routeFadeIn {
+  from {
+    opacity: 0.94;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.page-transition-fade {
+  animation: routeFadeIn 150ms ease-out forwards;
+}
+
+/* ========================================================
+   PREFERS-REDUCED-MOTION
+   ======================================================== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .btn-idle-shine::after,
+  .shine-sweep-once::after,
+  .btn-ripple-circle,
+  .phone-ring-icon,
+  .leaf-sway,
+  .cta-btn-pulse,
+  .cta-glow-drift,
+  .hero-photo-zoom,
+  .mint-glow-pulse,
+  .healing-shimmer,
+  .star-twinkle,
+  .photo-wipe-reveal,
+  .cta-photo-zoom {
+    animation: none !important;
+  }
+
+  .doctors-marquee-track {
+    animation: none !important;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+  }
+
+  .doctors-marquee-card {
+    scroll-snap-align: start;
+  }
+}
